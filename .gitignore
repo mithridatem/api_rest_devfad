@@ -1,0 +1,9 @@
+/vendor/
+/.env
+/.idea/
+/.vscode/
+
+# SQLite databases
+/var/*.sqlite
+/var/*.sqlite-*
+/var/*.db
