@@ -27,4 +27,19 @@ abstract class AbstractController
         header('Location: ' . $path, true, 303);
         exit;
     }
+
+    protected function jsonResponse(array $data, int $statusCode = 200): void 
+    {
+        //ajouter les entêtes HTTP
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
+        header('X-Content-type-Options: nosniff');   
+        
+        //status code
+        http_response_code($statusCode);
+        //json 
+        echo json_encode($data);
+    }
+
+
 }

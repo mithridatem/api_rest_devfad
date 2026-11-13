@@ -2,10 +2,11 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
 use Mithridatem\Routing\Attribute\Route;
 use Mithridatem\Routing\Http\RequestInterface;
 
-class TestApiController
+class TestApiController extends AbstractController
 {
     //Méthode qui retourne un JSON en GET
     #[Route(path: '/api/test', method: 'GET')]
@@ -15,7 +16,7 @@ class TestApiController
         $response = ["message" => "Bonjour"];
 
         //ajouter les entêtes HTTP
-        header('Content-Type: text/json');
+        header('Content-Type: application/json');
 
         header('Access-Control-Allow-Origin: *');
 
@@ -87,5 +88,36 @@ class TestApiController
             flags: JSON_THROW_ON_ERROR
         );
         print_r($json_array);
+    }
+
+
+    #[Route(path:'/api/test/endpoint_get', method:'GET')]
+    public function endPointGet(): void
+    {
+        $data = ["prenom"=>"Mathieu", "date-jour"=>date('Y-m-d')];
+
+        $this->jsonResponse($data, 200);
+    }
+
+    #[Route(path :'/api/test/endpoint_param/{valeur}', method:'GET')]
+    public function endPointParam(string $valeur): void
+    {
+        //Créer le tableau et ajouter la valeur
+        $data = ["message" => $valeur];
+
+        $this->jsonResponse($data, 200);
+    }
+
+    #[Route(path:'/api/test/endpoint_body', method:'GET')]
+    public function endPointBody(RequestInterface $request): void
+    {
+        //Récupération du json depuis le body
+        $json = $request->getContent();
+        //transformation en tableau
+        $json_array = json_decode($json, true);
+        //tableau pour la sortie
+        $data = ["message"=>$json_array];
+        //réponse en Json
+        $this->jsonResponse($data, 201);
     }
 }
